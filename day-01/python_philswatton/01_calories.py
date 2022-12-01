@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-import re
 
 # Usage: python 01_calories.py input_file_path
 def get_input_file_path() -> str:
