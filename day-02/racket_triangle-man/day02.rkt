@@ -1,7 +1,5 @@
 #lang racket
 
-(require threading)
-
 ;; Coding scheme for rock-paper-scissors:
 ;; 0 : Rock
 ;; 1 : Paper
