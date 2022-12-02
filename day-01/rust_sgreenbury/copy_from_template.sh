@@ -28,6 +28,7 @@ rsync -azvu \
     --include main.rs \
     --exclude target/ \
     --exclude *.rs \
+    --exclude *.txt \
     --exclude ".*" \
     $SOURCE_PATH/src \
     $SOURCE_PATH/Cargo.toml \
