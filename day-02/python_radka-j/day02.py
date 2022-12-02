@@ -1,7 +1,10 @@
+# ROCK PAPER SCISSORS
+
 # read input file
 with open('input02.txt') as f:
     lines = f.read().splitlines()
 
+# in part 1, interpret each letter as a move
 map = {
     "A": "rock", 
     "B": "paper",
@@ -11,16 +14,18 @@ map = {
     "Z": "scissors"
 }
 
+# each move I can play has a score
 scores = {
     "rock": 1,
     "paper": 2,
     "scissors": 3
 }
 
-# what each option wins or loses over
+# dictionary of what each option wins/loses over
 winning_combos = {"rock": "scissors", "scissors": "paper", "paper": "rock"}
 losing_combos = {v:k for k,v in winning_combos.items()}
 
+# variables to track the final result
 part_1_score = 0
 part_2_score = 0
 
@@ -41,20 +46,21 @@ for line in lines:
     # win
     elif play_opponent == winning_combos[play_me]:
         part_1_score += 6
-    # loss = score of 0, don't need to update
+    # loss means score of 0, don't need to update
 
     #========================================================
     # part 2: X=lose, Y=draw, Z=win
     # --> determine what I should play and update score
     #========================================================
     if me == "Y":
-        part_2_score += scores[play_opponent]
+        play_me = play_opponent
+        part_2_score += scores[play_me]
         part_2_score += 3
 
     elif me == "X":
         play_me = winning_combos[play_opponent]
         part_2_score += scores[play_me]
-        
+        # loss so part_2_score += 0
     else:
         play_me = losing_combos[play_opponent]
         part_2_score += scores[play_me]
