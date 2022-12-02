@@ -53,7 +53,10 @@ fn decode_part2(left: &Strategy, encoded_char: char) -> Strategy {
     }
 }
 
-fn play_game(input: &str, decode_fn: &dyn Fn(&Strategy, char) -> Strategy) -> u32 {
+fn play_game<F>(input: &str, decode_fn: F) -> u32
+where
+    F: Fn(&Strategy, char) -> Strategy,
+{
     input
         .lines()
         .map(|line| {
@@ -70,11 +73,11 @@ fn play_game(input: &str, decode_fn: &dyn Fn(&Strategy, char) -> Strategy) -> u3
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
-    Some(play_game(input, &decode_part1))
+    Some(play_game(input, decode_part1))
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    Some(play_game(input, &decode_part2))
+    Some(play_game(input, decode_part2))
 }
 
 fn main() {
