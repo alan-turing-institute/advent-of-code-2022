@@ -22,12 +22,7 @@
      [#\Y 1]
      [#\Z 2])))
 
-;; For part 2. Here "you" is your desired end state
-;; game? -> game?
-(define/match (play-game game)
-  [((cons them you))
-   (cons them (modulo (+ them (- you 1)) 3))])
-
+;; score-game : game? -> number?
 (define/match (score-game game)
   [((cons them you))
    (+ (match (modulo (- you them) 3)
@@ -36,6 +31,12 @@
         [2 0] ; Loss
         )
       (+ you 1))])
+
+;; For part 2. Here "you" is your desired end state
+;; play-game : game? -> game?
+(define/match (play-game game)
+  [((cons them you))
+   (cons them (modulo (+ them (- you 1)) 3))])
 
 ;; Example
 
