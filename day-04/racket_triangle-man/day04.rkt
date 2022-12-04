@@ -43,7 +43,7 @@
   (or (subset? S T)
       (subset? T S)))
 
-;; overlap? : integer-set? integer-set? -> boolean?
+;; overlap? : integer-set? integer-set? -> (or/c boolean? number?)
 (define (overlap? S T)
   (get-integer (intersect S T)))
 
