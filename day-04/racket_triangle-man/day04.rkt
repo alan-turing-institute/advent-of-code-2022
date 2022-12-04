@@ -9,21 +9,17 @@
 (module+ main
   (require threading)
 
+  (define *input*
+    (~>>
+     "input.txt"
+     (with-input-from-file _ port->lines)
+     (map read-line)))
+
   ;; Part 1
-  
-  (~>>
-   "input.txt"
-   (with-input-from-file _ port->lines)
-   (map read-line)
-   (count (curry apply within?)))
+  (count (curry apply within?) *input*)
 
   ;; Part 2
-  
-  (~>>
-   "input.txt"
-   (with-input-from-file _ port->lines)
-   (map read-line)
-   (count (curry apply overlap?)))
+  (count (curry apply overlap?) *input*)
   
   )
 
