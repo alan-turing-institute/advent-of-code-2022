@@ -1,4 +1,3 @@
-import copy
 from collections import deque
 
 
@@ -11,11 +10,11 @@ def parse_stacks(lines):
     stacks = {i+1:deque() for i in range(n_stacks)}
 
     for line in lines:
-        # the end line for stacks in both test and input
-        if " 1   2   3" in line:
+        # stack data ends first time we encounter a number
+        if "1" in line:
             break
 
-        # crate contents correspond to indices 1, 5, 9 etc
+        # crate labels correspond to indices 1, 5, 9 etc
         chars = list(line)
         for n in range(n_stacks):
             index = 1 + n * 4
@@ -39,33 +38,6 @@ def parse_instructions(lines):
     return instructions
 
 
-def part1(stacks, instructions):
-    """
-    For each instruction, move one crate at a time.
-    """
-
-    for (count, move_from, move_to) in instructions:
-        for _ in range(count):
-            val = stacks[move_from].popleft()
-            stacks[move_to].appendleft(val)
-    return stacks
-
-
-def part2(stacks, instructions):
-    """    
-    For each instruction, move all crates at once.
-    """
-
-    for (count, move_from, move_to) in instructions:
-        # NOTE: deque().extendleft reverses order of iterable
-        # therefore we store vals in reverse order
-        vals = deque()
-        for _ in range(count):
-            vals.appendleft(stacks[move_from].popleft())
-        stacks[move_to].extendleft(vals)
-    return stacks
-
-
 def get_ans(stacks):
     """
     Create string of crate labels that are on top of each stack.
@@ -77,21 +49,50 @@ def get_ans(stacks):
     return ans
 
 
+def part1(lines):
+    """
+    For each instruction, move one crate at a time.
+    """
+
+    stacks = parse_stacks(lines)
+    instructions = parse_instructions(lines)
+
+    for (count, move_from, move_to) in instructions:
+        for _ in range(count):
+            val = stacks[move_from].popleft()
+            stacks[move_to].appendleft(val)
+
+    return get_ans(stacks)
+
+
+def part2(lines):
+    """    
+    For each instruction, move all crates at once.
+    """
+
+    stacks = parse_stacks(lines)
+    instructions = parse_instructions(lines)
+
+    for (count, move_from, move_to) in instructions:
+        # NOTE: deque().extendleft reverses order of iterable
+        # therefore we store vals in reverse order
+        vals = deque()
+        for _ in range(count):
+            vals.appendleft(stacks[move_from].popleft())
+        stacks[move_to].extendleft(vals)
+
+    return get_ans(stacks)
+
+
 def main(filename="input05.txt"):
 
     # read input
     with open(filename) as f:
         lines = f.readlines()
-    stacks = parse_stacks(lines)
-    instructions = parse_instructions(lines)
 
-    # apply instructions
-    CrateMover9000 = part1(copy.deepcopy(stacks), instructions)
-    CrateMover9001 = part2(copy.deepcopy(stacks), instructions)
-
-    # get final answer
-    print("part1", get_ans(CrateMover9000))
-    print("part2", get_ans(CrateMover9001))
+    # get answer
+    print("part1", part1(lines))
+    print("part2", part2(lines))
 
 
 if __name__ == "__main__":
