@@ -5,10 +5,12 @@ input = readlines("input.txt")
 
 function read_input(input)
     # obtaining the stacks
+    # stores in a dictionary {1: [A, B, C], 2: [D, E], ...} 
+    # where the first elements in the vectors correspond to the top of the stack
+    stacks = Dict(name => [] for name in 1:number_of_stacks)
     index_of_stacks_row = findfirst(x -> '1' in x, input)
     stacks_row = input[index_of_stacks_row]
     number_of_stacks = maximum(parse.(Int64, split(filter(isdigit, stacks_row), "")))
-    stacks = Dict(name => [] for name in 1:number_of_stacks)
     for i in 1:number_of_stacks
         # index of the string which contains the letters for current stack
         index = 4*i-2
