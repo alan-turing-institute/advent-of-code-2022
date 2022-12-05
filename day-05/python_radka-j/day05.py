@@ -57,10 +57,12 @@ def part2(stacks, instructions):
     """
 
     for (count, move_from, move_to) in instructions:
-        vals = []
+        # NOTE: deque().extendleft reverses order of iterable
+        # therefore we store vals in reverse order
+        vals = deque()
         for _ in range(count):
-            vals.append(stacks[move_from].popleft())
-        stacks[move_to].extendleft(vals[::-1])
+            vals.appendleft(stacks[move_from].popleft())
+        stacks[move_to].extendleft(vals)
     return stacks
 
 
