@@ -4,11 +4,9 @@ test_input = readlines("test_input.txt")
 input = readlines("input.txt")[1]
 
 function detect_signal(input, n_unique)    
-    position = n_unique-1
-    unique = 0
-    while (unique != n_unique)
+    position = n_unique
+    while (length(Set(input[(position-n_unique+1):position])) != n_unique)
         position += 1
-        unique = length(Set(input[(position-n_unique+1):position]))
     end
     return position, input[(position-n_unique+1):position]
 end
