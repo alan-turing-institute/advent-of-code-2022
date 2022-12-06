@@ -30,8 +30,8 @@ let advance_window arr (start_idx, end_idx) =
     else if idx = start_idx
     then 
       idx
-else
-  find_duplicate (idx - 1) in
+    else 
+      find_duplicate (idx - 1) in
   (find_duplicate end_idx), end_idx + 1
 
 (** Make an infinite list of advancing windows, and return the first one whose
