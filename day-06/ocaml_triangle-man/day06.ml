@@ -24,8 +24,7 @@ let input = In_channel.input_all (In_channel.open_text "input.txt")
 let advance_window arr (start_idx, end_idx) =
   let next = arr.(end_idx + 1) in 
   let rec find_duplicate idx =
-    if arr.(idx) = next
-    then
+    if arr.(idx) = next then
       idx + 1
     else if idx = start_idx
     then 
