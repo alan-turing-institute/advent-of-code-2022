@@ -28,7 +28,6 @@ class directory:
         total_size = 0 
         for file in self.files:
             total_size += file.size
-
         for dir_ in self.dirs.values():
             total_size += dir_.total_size()
         return total_size
@@ -57,7 +56,6 @@ if __name__ == '__main__':
                 home_dir = directory(name=line[2], parent=None)
                 current_dir = home_dir
                 all_dirs.append(current_dir)
-
             else:
                 if line[2] == '..':
                     current_dir = current_dir.parent
@@ -71,7 +69,6 @@ if __name__ == '__main__':
             if line[1] not in current_dir.dirs.keys():
                 current_dir.add_dir(line[1], current_dir)        
                 
-
         elif line[1] == 'ls':
             pass
 
