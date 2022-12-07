@@ -50,26 +50,30 @@ lines = read_input("input07.txt")
 directory_sizes = parse_data(lines)
 
 # ================================================================
-# part 1: sum sizes of directories with size <= max_val
+# part 1: sum sizes of directories within max_allowed_size
 # ================================================================
 
 total_sum = 0
-max_val = 100000
+max_allowed_size = 100000
 for size in directory_sizes.values():
-    if size <= max_val:
+    if size <= max_allowed_size:
         total_sum += size
 
 print("part 1:", total_sum)
 
 # ================================================================
-# part 2: find smallest directory that can delete to free up space
+# part 2: find smallest dir to delete to free up required space
 # ================================================================
 
-smallest_so_far = 70000000 # start at max capacity
-free_space = smallest_so_far - directory_sizes["/"] # root size
-required_space = 30000000 - free_space
+total_space = 70000000 
+required_capacity = 30000000
+taken_up = directory_sizes["/"]
+free_space = total_space - taken_up
+to_free_up = required_capacity - free_space
+
+smallest_so_far = total_space
 for size in directory_sizes.values():
-    if size >= required_space and size < smallest_so_far:
+    if size >= to_free_up and size < smallest_so_far:
         smallest_so_far = size
 
 print("part 2:", smallest_so_far)
