@@ -72,7 +72,7 @@ if __name__ == '__main__':
         elif line[1] == 'ls':
             pass
 
-        else:  # type(line[1]) == int:
+        else:
             current_dir.add_file(line[1], int(line[0]))
     
     unused_space = 70000000 - home_dir.total_size()
