@@ -1,14 +1,13 @@
 
 class file:
-    
     def __init__(self, name, size):
         self.name = name
         self.size = size
 
 
 class directory:
-
-    def __init__(self, parent, files=None, dirs=None):
+    def __init__(self, name, parent, files=None, dirs=None):
+        self.name = name
         self.parent = parent
         if files is None:
             self.files = []
@@ -19,69 +18,77 @@ class directory:
         else:
             self.dirs = dirs
 
-    def add_file(name, size):
+    def add_file(self, name, size):
         self.files.append(file(name, size))
 
-    
-    def add_dir(name, parent, files=None, dirs=None):
-        self.dirs[name] = directory(parent, files, dirs)
-
+    def add_dir(self, name, parent, files=None, dirs=None):
+        self.dirs[name] = directory(name, parent, files, dirs)
 
     def total_size(self):
         total_size = 0 
-        for file in files:
+        for file in self.files:
             total_size += file.size
 
-        for dir_ in dirs:
+        for dir_ in self.dirs.values():
             total_size += dir_.total_size()
-
         return total_size
 
-
-def get_line(lines, line_pos):
-    line = lines[line_pos].strip().split(' ')
-    print(line_pos, line)    
-    line_pos += 1
-    return line, line_pos
+    def print_dir(self, indent=0, indent_inc=3):
+        print(' '*indent+'-', self.name, '(dir)')
+        for dir_ in self.dirs.values():
+            dir_.print_dir(indent+indent_inc, indent_inc)
+        for file in self.files:
+            print(' '*(indent+indent_inc)+'-', file.name, '(file, size='+str(file.size)+')')
 
 
 if __name__ == '__main__':
+    verbose = False
     f = open('input.txt', 'r')
     lines = f.readlines()
 
-    line_pos = 0
     current_dir = None
-    line, line_pos = get_line(lines, line_pos)
-    
-    while line_pos < len(lines):
-        if line[0] != '$':
-            exit('Should start loop at command')
+    all_dirs = []
+
+    for line in lines:
+        line = line.strip().split(' ')
 
         if line[1] == 'cd':
             if current_dir is None:
-                home_dir = directory(parent=None)
+                home_dir = directory(name=line[2], parent=None)
                 current_dir = home_dir
-                line, line_pos = get_line(lines, line_pos)
+                all_dirs.append(current_dir)
+
             else:
-                if line[2] not in current_dir.dirs.keys():
+                if line[2] == '..':
+                    current_dir = current_dir.parent
+                elif line[2] not in current_dir.dirs.keys():
                     exit('Trying to enter a dir that does not exist')
                 else:
                     current_dir = current_dir.dirs[line[2]]
-                    line, line_pos = get_line(lines, line_pos)
+                    all_dirs.append(current_dir)
+        
+        elif line[0] == 'dir':
+            if line[1] not in current_dir.dirs.keys():
+                current_dir.add_dir(line[1], current_dir)        
+                
 
-        if line[1] == 'ls':
-            line, line_pos = get_line(lines, line_pos)
-            while line[0] != '$':
-                if type(line[1]) == int:
-                    current_dir.add_file(line[2], line[1])
-                    line, line_pos = get_line(lines, line_pos)
-                if line[1] == 'dir':
-                    print('in dir')
-                    current_dir.add_dir(name=line[2], parent=current_dir)
-                    line, line_pos = get_line(lines_, line_pos)
+        elif line[1] == 'ls':
+            pass
+
+        else:  # type(line[1]) == int:
+            current_dir.add_file(line[1], int(line[0]))
     
-    print(home_dir.total_size())
-
-
-
+    unused_space = 70000000 - home_dir.total_size()
+    required_deleted = 30000000 - unused_space
+    potentials = []
+    total_size = 0
+    for dir_ in all_dirs:
+        size = dir_.total_size()
+        if size <= 100000:
+            total_size += size
+        if size >= required_deleted:
+            potentials.append(size)
+    
+    print('Part one:', total_size)
+    print('Part two:', min(potentials))
 
