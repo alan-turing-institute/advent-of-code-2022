@@ -8,10 +8,10 @@ function find_dir_sizes(input)
     sizes = Dict{String,Int64}()
     for line ∈ input
         if startswith(line, "\$ cd ..")
-            # move back a directory
+            # move back a directory by removing last path
             pop!(paths)
         elseif startswith(line, "\$ cd ")
-            # append the next directory
+            # append the next directory path
             directory = split(line, "\$ cd ")[2]
             if directory == "/"
                 push!(paths, "~")
@@ -22,6 +22,8 @@ function find_dir_sizes(input)
             # add size of file to all paths
             size = parse(Int64, split(line, " ")[1])
             mergewith!(+, sizes, Dict(path => size for path ∈ paths))
+        elseif line != "\$ ls" && !startswith(line, "dir")
+            throw(error("unexpected line format: $(line)"))
         end
     end
     return sizes
@@ -29,6 +31,7 @@ end
 
 function part_one(input)
     sizes = find_dir_sizes(input)
+    # sum all sizes less than 100000
     return sum(filter(x -> x <= 100000, collect(values(sizes))))
 end
 
@@ -37,6 +40,7 @@ function part_two(input)
     total_space = 70000000
     required = 30000000
     unused = total_space-sizes["~"]
+    # find smallest directory size which makes us have enough space
     return minimum(filter(x -> x > required-unused, collect(values(sizes))))
 end
 
