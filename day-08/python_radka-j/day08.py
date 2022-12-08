@@ -1,5 +1,3 @@
-import math
-
 
 def read_input(filename):
     with open(filename) as f:
@@ -42,9 +40,11 @@ def check_visibility(i, j, tree_height, grid):
 
     # try all directions and see if can get to the edge
     for go_f in (go_up, go_down, go_right, go_left):
-        # starting position and tree height
+
+        # starting position
         posi, posj = i, j
         view_d = 0
+        
         while True:
             # reached an edge so tree is visible
             if posi == 0 or posj == 0 or posi == (len(grid) - 1) or posj == (len(grid) - 1):
@@ -64,12 +64,14 @@ def check_visibility(i, j, tree_height, grid):
                     viewing_distances *= view_d
                 break            
             
-    # never reached the edge i.e., this tree is not visible
     return visible, viewing_distances
+
+
 
 grid = read_input("input08.txt")
 n_visible = 0
 max_scenic = 0
+
 for i, row in enumerate(grid):
     for j, tree_height in enumerate(row):
         visible, viewing_distances = check_visibility(i, j, int(tree_height), grid)
