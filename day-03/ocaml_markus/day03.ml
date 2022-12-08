@@ -1,11 +1,5 @@
 open Aoc22_ocaml
 
-(* Encoding:
-   1: Rock
-   2: Paper
-   3: Scissors
-*)
-
 let example_lines =
   [ "vJrwpWtwJgWrhcsFMMfFFhFp"
   ; "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"
