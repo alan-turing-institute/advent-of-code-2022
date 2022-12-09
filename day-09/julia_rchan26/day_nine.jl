@@ -11,25 +11,13 @@ function is_touching(H_location::Tuple{Int64, Int64}, T_location::Tuple{Int64, I
         return true
     elseif H_location[1]==T_location[1]
         # same row
-        if abs(H_location[2]-T_location[2]) > 1
-            return false
-        else
-            return true
-        end
+        return abs(H_location[2]-T_location[2]) == 1
     elseif H_location[2]==T_location[2]
         # same column
-        if abs(H_location[1]-T_location[1]) > 1
-            return false
-        else
-            return true
-        end
+        return abs(H_location[1]-T_location[1]) == 1
     elseif H_location[1]!=T_location[1] && H_location[2]!=T_location[2]
-        # not in the same row or column, need to move diagonally
-        if abs(H_location[1]-T_location[1]) > 1 || abs(H_location[2]-T_location[2]) > 1
-            return false
-        else
-            return true
-        end
+        # not in the same row or column, need to touch diagonally
+        return abs(H_location[1]-T_location[1]) == 1 && abs(H_location[2]-T_location[2]) == 1
     end
 end
 
@@ -125,14 +113,12 @@ Test.@test part_one(test_input) == 13
 
 function update_T_location(H_location::Tuple{Int64, Int64}, T_location::Tuple{Int64, Int64})
     # does not use move_instruction
-    if ~is_touching(H_location, T_location)
-        x_diff = H_location[1] - T_location[1]
-        y_diff = H_location[2] - T_location[2]
-        if max(abs(x_diff), abs(y_diff)) > 1
-            x = x_diff > 0 ? T_location[1]+1 : x_diff < 0 ? T_location[1]-1 : T_location[1]
-            y = y_diff > 0 ? T_location[2]+1 : y_diff < 0 ? T_location[2]-1 : T_location[2]
-            T_location = (x, y)
-        end
+    x_diff = H_location[1] - T_location[1]
+    y_diff = H_location[2] - T_location[2]
+    if max(abs(x_diff), abs(y_diff)) > 1
+        x = x_diff > 0 ? T_location[1]+1 : x_diff < 0 ? T_location[1]-1 : T_location[1]
+        y = y_diff > 0 ? T_location[2]+1 : y_diff < 0 ? T_location[2]-1 : T_location[2]
+        T_location = (x, y)
     end
     return T_location
 end
