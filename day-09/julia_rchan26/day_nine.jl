@@ -5,22 +5,6 @@ test_input = readdlm("test_input.txt")
 input = readdlm("input.txt")
 test_input_part_two = readdlm("test_input_part_two.txt")
 
-function is_touching(H_location::Tuple{Int64, Int64}, T_location::Tuple{Int64, Int64})
-    if H_location==T_location
-        # H covers T
-        return true
-    elseif H_location[1]==T_location[1]
-        # same row
-        return abs(H_location[2]-T_location[2]) == 1
-    elseif H_location[2]==T_location[2]
-        # same column
-        return abs(H_location[1]-T_location[1]) == 1
-    elseif H_location[1]!=T_location[1] && H_location[2]!=T_location[2]
-        # not in the same row or column, need to touch diagonally
-        return abs(H_location[1]-T_location[1]) == 1 && abs(H_location[2]-T_location[2]) == 1
-    end
-end
-
 function move(location::Tuple{Int64, Int64}, move::Char)
     if move == 'R'
         return (location[1]+1, location[2])
@@ -38,7 +22,6 @@ end
 ##### Part One
 
 #=
-Notes:
 I've left my solution for Part One here even though it does not work for Part Two.
 My Part Two solution, however, can be used for both parts.
 
@@ -53,6 +36,22 @@ rope lengths > 2, as we need for Part Two.
 I've used Julia's multiple dispatch to have an alternative update_T_location function
 which does not use the move instruction.
 =#
+
+function is_touching(H_location::Tuple{Int64, Int64}, T_location::Tuple{Int64, Int64})
+    if H_location==T_location
+        # H covers T
+        return true
+    elseif H_location[1]==T_location[1]
+        # same row
+        return abs(H_location[2]-T_location[2]) == 1
+    elseif H_location[2]==T_location[2]
+        # same column
+        return abs(H_location[1]-T_location[1]) == 1
+    elseif H_location[1]!=T_location[1] && H_location[2]!=T_location[2]
+        # not in the same row or column, need to touch diagonally
+        return abs(H_location[1]-T_location[1]) == 1 && abs(H_location[2]-T_location[2]) == 1
+    end
+end
 
 function obtain_diagonal_moves(move::Char)
     if move == 'U' || move == 'D'
@@ -110,6 +109,10 @@ end
 Test.@test part_one(test_input) == 13
 
 ##### Part Two
+
+#=
+Part Two solution, part_two, can solve both parts by passing in the length of the rope.
+=#
 
 function update_T_location(H_location::Tuple{Int64, Int64}, T_location::Tuple{Int64, Int64})
     # does not use move_instruction
