@@ -38,19 +38,7 @@ which does not use the move instruction.
 =#
 
 function is_touching(H_location::Tuple{Int64, Int64}, T_location::Tuple{Int64, Int64})
-    if H_location==T_location
-        # H covers T
-        return true
-    elseif H_location[1]==T_location[1]
-        # same row
-        return abs(H_location[2]-T_location[2]) == 1
-    elseif H_location[2]==T_location[2]
-        # same column
-        return abs(H_location[1]-T_location[1]) == 1
-    elseif H_location[1]!=T_location[1] && H_location[2]!=T_location[2]
-        # not in the same row or column, need to touch diagonally
-        return abs(H_location[1]-T_location[1]) == 1 && abs(H_location[2]-T_location[2]) == 1
-    end
+    return abs(H_location[1]-T_location[1]) <= 1 && abs(H_location[2]-T_location[2]) <= 1
 end
 
 function obtain_diagonal_moves(move::Char)
