@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def read_input(filename):
     with open(filename) as f:
         lines = f.read().splitlines()
@@ -7,7 +8,6 @@ def read_input(filename):
 
 
 def move_head(head_pos, direction):
-    # for d in list(direction):
     if direction == "R":
         head_pos[1] += 1
     elif direction == "L":
@@ -36,6 +36,8 @@ def move_tail(head_pos, tail_pos):
     if np.any(np.all(dist == touching, axis=1)):
         return tail_pos
     else:
+        # move by 0, 1 or -1 in both horizontal and vertical
+        # depending on distance between the two knots
         tail_pos[0] += np.sign(dist[0])
         tail_pos[1] += np.sign(dist[1])
         return tail_pos
@@ -48,7 +50,7 @@ def main(n_tails, instructions):
     tails = []
     for i in range(n_tails):
         tails.append([4, 0])
-    # keep track of visited locations
+    # keep track of visited locations of last knot
     visited = [tuple(tails[-1])]
 
     # move all knots according to instructions
