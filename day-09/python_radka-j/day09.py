@@ -28,16 +28,12 @@ def move_tail(head_pos, tail_pos):
     # [row_dist, col_dist]
     dist = calc_distance(head_pos, tail_pos)
 
-    # if touching do, nothing
-    touching = np.array([
-        [0, 0], [1, 1], [-1, -1], [0, 1], [0, -1], 
-        [1, 0],[-1, 0], [1, -1], [-1, 1]
-        ])
-    if np.any(np.all(dist == touching, axis=1)):
+    # if touching, do nothing
+    if dist[0] in [-1, 0, 1] and dist[1] in [-1, 0, 1]:
         return tail_pos
     else:
         # move by 0, 1 or -1 in both horizontal and vertical
-        # depending on distance between the two knots
+        # depending on distance direction between the two knots
         tail_pos[0] += np.sign(dist[0])
         tail_pos[1] += np.sign(dist[1])
         return tail_pos
