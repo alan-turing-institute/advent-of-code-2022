@@ -31,7 +31,7 @@ function part_two(input; ncol::Int64 = 40)
             grid[grid_i, grid_j] = grid_j in sprite_position ? '#' : '.'
             grid_j += 1
             if grid_j > ncol
-                # mve to next line in grid
+                # move to next line in grid
                 grid_i += 1
                 grid_j = 1
             end
