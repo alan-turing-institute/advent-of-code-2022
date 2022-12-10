@@ -43,7 +43,7 @@ function part_two(input; ncol::Int64 = 40)
         end
     end
     # concatenate characters in each row
-    CRT_drawing = [join(grid[i,:]) for i in 1:size(grid)[1]]
+    CRT_drawing = [join(row) for row in eachrow(grid)]
     return CRT_drawing 
 end
 
