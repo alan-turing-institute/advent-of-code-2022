@@ -36,7 +36,7 @@ function part_two(input; ncol::Int64 = 40)
                 grid_j = 1
             end
         end
-        if input[i,1]=="addx"
+        if input[i,1] == "addx"
             # update value and sprite position
             value += input[i,2]
             sprite_position = value:(value+2) 
