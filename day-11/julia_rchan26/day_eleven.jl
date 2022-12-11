@@ -18,7 +18,7 @@ function parse_input(input_file::String)::Dict{Int64, Monkey}
     # returns a dictionary where keys are monkey index and values are Monkey structs
     lines = readlines(input_file)
     indices = filter(i -> startswith(lines[i], "Monkey "), eachindex(lines))
-    🐵 = Dict()
+    🐵🐵 = Dict()
     for i in indices
         monkey_number = parse(Int64, split(split(lines[i], "Monkey ")[2], ":")[1])
         items = parse.(Int64, split(split(lines[i+1], "Starting items: ")[2], ", "))
@@ -28,60 +28,60 @@ function parse_input(input_file::String)::Dict{Int64, Monkey}
         true_to = parse(Int64, split(lines[i+4], "If true: throw to monkey ")[2])
         false_to = parse(Int64, split(lines[i+5], "If false: throw to monkey ")[2])
         m = Monkey(items, 0, operation, test_div, true_to, false_to)
-        mergewith!(+, 🐵, Dict(monkey_number => m))
+        mergewith!(+, 🐵🐵, Dict(monkey_number => m))
     end
-    return 🐵
+    return 🐵🐵
 end
 
-function perform_rounds(🐵::Dict{Int64, Monkey}, n_rounds::Int64, part_one::Bool)::Dict{Int64, Monkey}
+function perform_rounds(🐵🐵::Dict{Int64, Monkey}, n_rounds::Int64, part_one::Bool)::Dict{Int64, Monkey}
     for _ in 1:n_rounds
         # compute lowest common multiplier if doing Part Two
         if ~part_one
-            val = lcm([🐵[i].test_div for i in eachindex(🐵)])
+            val = lcm([🐵🐵[i].test_div for i in eachindex(🐵🐵)])
         end
-        for i in sort(collect(keys(🐵)))
+        for i in sort(collect(keys(🐵🐵)))
             # determine how many items the monkey will inspect this round
-            🐵[i].items_inspected += length(🐵[i].items)
+            🐵🐵[i].items_inspected += length(🐵🐵[i].items)
             # performing operation on the items
             # obtaining the magnitude to multiply or add
-            if 🐵[i].operation.mag == "old"
-                mag = 🐵[i].items
+            if 🐵🐵[i].operation.mag == "old"
+                mag = 🐵🐵[i].items
             else
-                m = parse(Int64, 🐵[i].operation.mag)
-                mag = repeat([m], length(🐵[i].items))
+                m = parse(Int64, 🐵🐵[i].operation.mag)
+                mag = repeat([m], length(🐵🐵[i].items))
             end
             # perform multiplication or addition to worry levels
-            if 🐵[i].operation.op == "*"
-                🐵[i].items = 🐵[i].items .* mag
-            elseif 🐵[i].operation.op == "+"
-                🐵[i].items = 🐵[i].items .+ mag
+            if 🐵🐵[i].operation.op == "*"
+                🐵🐵[i].items = 🐵🐵[i].items .* mag
+            elseif 🐵🐵[i].operation.op == "+"
+                🐵🐵[i].items = 🐵🐵[i].items .+ mag
             end
             # worry management!!!
             if part_one
-                🐵[i].items = 🐵[i].items .÷ 3
+                🐵🐵[i].items = 🐵🐵[i].items .÷ 3
             else
-                🐵[i].items = 🐵[i].items .% val
+                🐵🐵[i].items = 🐵🐵[i].items .% val
             end
             # perform test on each item to see where to throw
-            for j in eachindex(🐵[i].items)
-                if mod(🐵[i].items[j], 🐵[i].test_div) == 0
-                    push!(🐵[🐵[i].true_to].items, 🐵[i].items[j])
+            for j in eachindex(🐵🐵[i].items)
+                if mod(🐵🐵[i].items[j], 🐵🐵[i].test_div) == 0
+                    push!(🐵🐵[🐵🐵[i].true_to].items, 🐵🐵[i].items[j])
                 else
-                    push!(🐵[🐵[i].false_to].items, 🐵[i].items[j])
+                    push!(🐵🐵[🐵🐵[i].false_to].items, 🐵🐵[i].items[j])
                 end
             end
             # empty items
-            🐵[i].items = Vector{Int64}[]
+            🐵🐵[i].items = Vector{Int64}[]
         end
     end
-    return 🐵
+    return 🐵🐵
 end
 
 function day_eleven(input_file::String, n_rounds::Int64, part_one::Bool)::Int64
-    🐵 = parse_input(input_file)
-    🐵 = perform_rounds(🐵, n_rounds, part_one)
-    items_inspected = [🐵[i].items_inspected for i in collect(keys(🐵))]
-    # multiply items inspected by two most active 🐵 to obtain monkey business level
+    🐵🐵 = parse_input(input_file)
+    🐵🐵 = perform_rounds(🐵🐵, n_rounds, part_one)
+    items_inspected = [🐵🐵[i].items_inspected for i in collect(keys(🐵🐵))]
+    # multiply items inspected by two most active monkeys to obtain monkey business level
     return prod(sort(items_inspected)[(end-1):end])
 end
 
