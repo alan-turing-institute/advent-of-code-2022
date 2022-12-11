@@ -34,11 +34,11 @@ function parse_input(input_file::String)::Dict{Int64, Monkey}
 end
 
 function perform_rounds(🐵🐵::Dict{Int64, Monkey}, n_rounds::Int64, part_one::Bool)::Dict{Int64, Monkey}
+    # compute lowest common multiplier if doing Part Two
+    if ~part_one
+        val = lcm([🐵🐵[i].test_div for i in eachindex(🐵🐵)])
+    end
     for _ in 1:n_rounds
-        # compute lowest common multiplier if doing Part Two
-        if ~part_one
-            val = lcm([🐵🐵[i].test_div for i in eachindex(🐵🐵)])
-        end
         for i in sort(collect(keys(🐵🐵)))
             # determine how many items the monkey will inspect this round
             🐵🐵[i].items_inspected += length(🐵🐵[i].items)
