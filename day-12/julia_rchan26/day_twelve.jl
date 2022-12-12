@@ -15,8 +15,7 @@ function find_start_end(grid::Matrix{Char};
     S_loc = findall(x -> x == 'S', grid)
     E_loc = findall(x -> x == 'E', grid)
     if all_possible_starts
-        start_locs = vcat(findall(x -> x == 'S', grid),
-            findall(x -> x == 'a', grid))
+        start_locs = vcat(S_loc, findall(x -> x == 'a', grid))
         return start_locs, E_loc[1]
     else
         return S_loc, E_loc[1]
