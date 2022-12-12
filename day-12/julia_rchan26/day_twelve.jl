@@ -10,13 +10,13 @@ test_input = parse_input("test_input.txt")
 input = parse_input("input.txt")
 
 function find_start_end(grid::Matrix{Char};
-                        all_possible_starts::Bool=false)::Tuple{Vector{CartesianIndex},CartesianIndex}
+                        all_possible_starts::Bool = false)::Tuple{Vector{CartesianIndex}, CartesianIndex}
     # finds the start and end by identifying 'S' and 'E'
     S_loc = findall(x -> x == 'S', grid)
     E_loc = findall(x -> x == 'E', grid)
     if all_possible_starts
-        start_locs = vcat(S_loc, findall(x -> x == 'a', grid))
-        return start_locs, E_loc[1]
+        # also identify alternative 'a' start values
+        return vcat(S_loc, findall(x -> x == 'a', grid)), E_loc[1]
     else
         return S_loc, E_loc[1]
     end
@@ -37,18 +37,20 @@ function find_possible_neighbours(point::CartesianIndex,
                                   grid::Matrix{Char})::Vector{CartesianIndex}
     nrow, ncol = size(grid)
     neighbours = CartesianIndex.([(point[1] - 1, point[2]),
-        (point[1] + 1, point[2]),
-        (point[1], point[2] - 1),
-        (point[1], point[2] + 1)])
-    # check if still within grid edges
-    valid_neighbours = [x for x in neighbours if (1 <= x[1] <= nrow) && (1 <= x[2] <= ncol)]
-    # only return neighbours which are at most one higher
-    return [x for x in valid_neighbours if (grid[x] - grid[point]) <= 1]
+                                  (point[1] + 1, point[2]),
+                                  (point[1], point[2] - 1),
+                                  (point[1], point[2] + 1)])  
+    # check if within grid edges and if a valid move
+    return [x for x in neighbours
+            if (1 <= x[1] <= nrow) && 
+                (1 <= x[2] <= ncol) && 
+                ((grid[x] - grid[point]) <= 1)]
 end
 
 function dijkstra(start_index::CartesianIndex,
                   end_index::CartesianIndex,
                   grid::Matrix{Char})::Dict{String,Any}
+    # Dijkstra algorithm to find shortest path
     visited = falses(size(grid))
     cost = fill(Inf, size(grid))
     cost[start_index] = 0
@@ -57,7 +59,7 @@ function dijkstra(start_index::CartesianIndex,
         min_cost_unvisited = findall(x -> x == minimum(cost[map(!, visited)]), cost)
         coord = min_cost_unvisited[findfirst(!visited[x] for x in min_cost_unvisited)]
         if coord == end_index
-            return Dict("cost" => cost, "cost_to_end" => cost[coord])
+            break
         end
         visited[coord] = true
         neighbours = find_possible_neighbours(coord, updated_grid)
@@ -70,7 +72,7 @@ function dijkstra(start_index::CartesianIndex,
             end
         end
     end
-    return Dict("cost" => cost, "cost_to_end" => cost[coord])
+    return Dict("cost" => cost, "cost_to_end" => cost[end_index])
 end
 
 function day_twelve(grid::Matrix{Char},
