@@ -94,7 +94,7 @@ end
 
 # testing cases
 Test.@test day_twelve(test_input, true) == 31
-Test.@test day_twelve(test_input, false)[1] == 29
+Test.@test day_twelve(test_input, false) == 29
 
 # Part One
 println("Part One: ", day_twelve(input, true))
