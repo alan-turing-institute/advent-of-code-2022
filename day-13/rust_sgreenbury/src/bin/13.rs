@@ -1,9 +1,3 @@
-// Patterns: '[', ']', '\d{1,2}', ','
-// '[' : increment depth, set list counter to 0
-// ']' : decrement depth, no more items
-// ',' : next item
-// '
-
 use itertools::Itertools;
 use std::cmp::Ordering;
 
@@ -20,6 +14,7 @@ enum Packet {
     List(Vec<Packet>),
 }
 
+// Patterns to match: '[', ']', '0-9', '10', ','
 fn string_to_tokens(line: &str) -> Vec<Token> {
     let mut it = line.chars().peekable();
     let mut tokens = Vec::<Token>::new();
