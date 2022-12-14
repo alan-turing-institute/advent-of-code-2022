@@ -156,7 +156,6 @@ pub fn part_two(input: &str) -> Option<u32> {
     });
     let div1_idx = packets.iter().position(|pack| *pack == divider_1).unwrap() + 1;
     let div2_idx = packets.iter().position(|pack| *pack == divider_2).unwrap() + 1;
-
     Some((div1_idx * div2_idx) as u32)
 }
 
