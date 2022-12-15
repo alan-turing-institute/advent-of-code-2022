@@ -6,7 +6,7 @@ def read_input(filename):
 
 def check_order(left_list, right_list):
     """
-    Recursively compare two lists (lists and ints).
+    Recursively compare two lists (of lists and ints).
     """
 
     for l,r in zip(left_list, right_list):
@@ -31,26 +31,29 @@ def check_order(left_list, right_list):
     if len(left_list) < len(right_list):
         return True
 
-# PART 1: check order of packets
-# return sum of indices of correctly ordered packets
+
+# PARSE INPUT
 lines = read_input("input13.txt")
 packets = [eval(line) for line in lines if line != ""]
 
-total = 0
+
+# PART 1: check if packet pairs are correctly ordered
+# return sum of indices of correctly ordered packets
+total_1 = 0
 for i in range(len(packets)//2):
     left, right = packets[i*2:i*2+2] 
     if check_order(left, right):
-        total += (i+1)
+        total_1 += (i+1)
 
-print(total)
+print("part 1:", total_1)
+
 
 # PART 2: determine correct order of packets
 # return indices of divired packets once orderd
 divider_packets = [[[2]], [[6]]]
 packets.extend(divider_packets)
-ordered_packets = []
 
-# let python sort packets for us
+# use inbuilt python sort
 class Packet:
     def __init__(self, packet):
         self.packet = packet
@@ -60,8 +63,10 @@ class Packet:
 
 class_packets = [Packet(vals) for vals in packets]
 class_packets.sort()
-total = 1
+
+total_2 = 1
 for i, packet in enumerate(class_packets):
     if packet.packet in divider_packets:
-        total *= (i+1)
-print(total)
+        total_2 *= (i+1)
+
+print("part 2:", total_2)
