@@ -8,8 +8,7 @@ impl Elf {
     fn contains(&self, other: &Elf) -> bool {
         self.low <= other.low && self.high >= other.high
     }
-}
-impl Elf {
+
     fn overlaps(&self, other: &Elf) -> bool {
         other.low >= self.low && other.low <= self.high
             || self.low >= other.low && self.low <= other.high
