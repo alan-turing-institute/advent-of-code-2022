@@ -333,7 +333,7 @@ pub fn part_two(input: &str) -> Option<usize> {
             true,
         );
     }
-    // Return the remaining number of sides not discovered
+    // Return the number of sides discovered
     Some(surface_sides.len() - surface_sides_remaining.len())
 }
 
