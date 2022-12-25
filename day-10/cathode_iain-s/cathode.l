@@ -1,16 +1,24 @@
 %{
-int cycles = 1;
+int cycles = 0;
 int x = 1;
+int total = 0;
+
 int print_if(int cycles, int x, int* total) {
-  if((cycles - 20) % 40 == 0){
-    *total += cycles * x;
-    //printf("total: %d ", *total);
+  int pixel_x = (cycles-1) % 40;
+
+  if ((x-2 < pixel_x) && (x+2 > pixel_x)){
+    printf("#");
+  } else {
+    printf(".");
   }
-  //printf("cycle: %d ", cycles);
-  //printf("x: %d \n", x);
+
+  if (pixel_x == 39){
+    printf("\n");
+  } else if (pixel_x == 19){
+    *total += cycles * x;
+  }
   return 0;
 }
-int total = 0;
 %}
 
 %%
